@@ -1,0 +1,43 @@
+PATH
+  remote: .
+  specs:
+    sumaki (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    debug (1.7.1)
+      irb (>= 1.5.0)
+      reline (>= 0.3.1)
+    diff-lcs (1.5.0)
+    io-console (0.6.0)
+    irb (1.6.2)
+      reline (>= 0.3.0)
+    rake (13.0.6)
+    reline (0.3.2)
+      io-console (~> 0.5)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.0)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  debug
+  rake (~> 13.0)
+  rspec (~> 3.0)
+  sumaki!
+
+BUNDLED WITH
+   2.4.5
