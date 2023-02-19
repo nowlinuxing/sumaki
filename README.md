@@ -1,5 +1,9 @@
 # Sumaki
 
+---
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/dd92d4092d6858cbcfb2/maintainability)](https://codeclimate.com/github/nowlinuxing/sumaki/maintainability)
+
 **Sumaki** is a wrapper for structured data like JSON.
 
 Since Sumaki wraps the target data as it is, rather than parsing it using a schema, the original data can be referenced at any time.
