@@ -2,6 +2,8 @@
 
 ---
 
+[![Gem Version](https://badge.fury.io/rb/sumaki.svg)](https://badge.fury.io/rb/sumaki)
+![example workflow](https://github.com/nowlinuxing/sumaki/actions/workflows/main.yml/badge.svg?branch=main)
 [![Maintainability](https://api.codeclimate.com/v1/badges/dd92d4092d6858cbcfb2/maintainability)](https://codeclimate.com/github/nowlinuxing/sumaki/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/dd92d4092d6858cbcfb2/test_coverage)](https://codeclimate.com/github/nowlinuxing/sumaki/test_coverage)
 
