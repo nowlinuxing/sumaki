@@ -4,9 +4,9 @@ RSpec.describe Sumaki::Model::Enum do
   describe '.enum' do
     class SumakiEnumTest
       include Sumaki::Model
-      enum :int, a: 1, b: 2, c: 3
-      enum :str, a: 'aaa', b: 'bbb', c: 'ccc'
-      enum :sym, a: :a_sym, b: :b_sym, c: :c_sym
+      enum :int, { a: 1, b: 2, c: 3 }
+      enum :str, { a: 'aaa', b: 'bbb', c: 'ccc' }
+      enum :sym, { a: :a_sym, b: :b_sym, c: :c_sym }
     end
 
     [
@@ -17,7 +17,7 @@ RSpec.describe Sumaki::Model::Enum do
       context "when the value of int is #{actual}" do
         subject(:wrapped) { SumakiEnumTest.new({ int: actual }) }
 
-        it { expect(wrapped.int).to eq(expected) }
+        it { expect(wrapped.int.name).to eq(expected) }
       end
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Sumaki::Model::Enum do
       context "when the value of str is #{actual}" do
         subject(:wrapped) { SumakiEnumTest.new({ str: actual }) }
 
-        it { expect(wrapped.str).to eq(expected) }
+        it { expect(wrapped.str.name).to eq(expected) }
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Sumaki::Model::Enum do
       context "when the value of sym is #{actual}" do
         subject(:wrapped) { SumakiEnumTest.new({ sym: actual }) }
 
-        it { expect(wrapped.sym).to eq(expected) }
+        it { expect(wrapped.sym.name).to eq(expected) }
       end
     end
   end

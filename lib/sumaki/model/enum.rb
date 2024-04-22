@@ -1,33 +1,21 @@
 # frozen_string_literal: true
 
+require 'minenum'
+
 module Sumaki
   module Model
     # = Sumaki::Model::Enum
     module Enum
       def self.included(base)
+        base.include Minenum::Model
         base.extend ClassMethods
       end
 
-      class EnumValue < Hash # :nodoc:
-        code = <<-RUBY
-          case value
-          when Symbol then super(value) || super(value.to_s)
-          when String then super(value) || super(value.to_sym)
-          else super(value)
-          end
-        RUBY
-
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
-          def key?(value); #{code}; end
-        RUBY
-
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
-          def key(value); #{code}; end
-        RUBY
-
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
-          def value?(value); #{code}; end
-        RUBY
+      module EnumAttrAccessor # :nodoc:
+        def get(model, name)
+          model.get(name)
+        end
+        module_function :get
       end
 
       module ClassMethods # :nodoc:
@@ -36,7 +24,7 @@ module Sumaki
         #   class Character
         #     include Sumaki::Model
         #     field :name
-        #     enum :type, vampire: 1, vampire_hunter: 2, familier: 3, editor: 4
+        #     enum :type, { vampire: 1, vampire_hunter: 2, familier: 3, editor: 4 }
         #   end
         #
         #   data = {
@@ -45,19 +33,11 @@ module Sumaki
         #   }
         #
         #   character = Character.new(data)
-        #   character.type #=> :familier
-        def enum(name, **values)
-          values = EnumValue[values]
-
-          enum_methods_module.define_method(name) do
-            value = get(name)
-
-            if values.key?(value)
-              value
-            elsif values.value?(value)
-              values.key(value)
-            end
-          end
+        #   character.type.name #=> :familier
+        #   character.type.familier? #=> true
+        #   character.type.vampire? #=> false
+        def enum(name, values)
+          super(name, values, adapter: EnumAttrAccessor)
         end
 
         private
@@ -68,6 +48,11 @@ module Sumaki
             include mod
             mod
           end
+        end
+
+        # TODO: remove this
+        def classify(key)
+          key.gsub(/([a-z\d]+)_?/) { |_| Regexp.last_match(1).capitalize }
         end
       end
     end

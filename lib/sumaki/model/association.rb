@@ -107,8 +107,6 @@ module Sumaki
       end
 
       module InstanceMethods # :nodoc:
-        private
-
         def get(name)
           self.class.adapter.get(object, name)
         end

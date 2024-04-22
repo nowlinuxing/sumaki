@@ -225,7 +225,7 @@ By declaring `enum`, You can map a field to the specified value.
 class Character
   include Sumaki::Model
   field :name
-  enum :type, vampire: 1, vampire_hunter: 2, familier: 3, editor: 4
+  enum :type, { vampire: 1, vampire_hunter: 2, familier: 3, editor: 4 }
 end
 
 data = {

@@ -133,7 +133,7 @@ RSpec.describe Sumaki::Model::Association do
     end
 
     it 'defines a method that returns an array of instances of the class' do
-      expect(wrapped.foo).to match_array([be_a(SumakiRepeatedTest::Foo), be_a(SumakiRepeatedTest::Foo)])
+      expect(wrapped.foo).to contain_exactly(be_a(SumakiRepeatedTest::Foo), be_a(SumakiRepeatedTest::Foo))
     end
 
     it 'sets the parent to the instances returned by the method it defines' do
@@ -142,8 +142,8 @@ RSpec.describe Sumaki::Model::Association do
 
     context 'when nested' do
       it 'defines a method that returns an array of instances of the class' do
-        expect(wrapped.foo[0].bar).to match_array([be_a(SumakiRepeatedTest::Foo::Bar),
-                                                   be_a(SumakiRepeatedTest::Foo::Bar)])
+        expect(wrapped.foo[0].bar).to contain_exactly(be_a(SumakiRepeatedTest::Foo::Bar),
+                                                      be_a(SumakiRepeatedTest::Foo::Bar))
       end
 
       it 'sets the parent to the instances returned by the method it defines' do
