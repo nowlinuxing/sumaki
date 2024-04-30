@@ -184,6 +184,10 @@ module Sumaki
         @object = object
         @parent = parent
       end
+
+      def get(name)
+        self.class.adapter.get(object, name)
+      end
     end
   end
 end

@@ -105,12 +105,6 @@ module Sumaki
           key.gsub(/([a-z\d]+)_?/) { |_| Regexp.last_match(1).capitalize }
         end
       end
-
-      module InstanceMethods # :nodoc:
-        def get(name)
-          self.class.adapter.get(object, name)
-        end
-      end
     end
   end
 end
