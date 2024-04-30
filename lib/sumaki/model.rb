@@ -186,6 +186,10 @@ module Sumaki
       def get(name)
         @adapter.get(@object, name)
       end
+
+      def set(name, value)
+        @adapter.set(@object, name, value)
+      end
     end
 
     module InstanceMethods # :nodoc:
@@ -202,6 +206,10 @@ module Sumaki
 
       def get(name)
         object_accessor.get(name)
+      end
+
+      def set(name, value)
+        object_accessor.set(name, value)
       end
 
       def inspect

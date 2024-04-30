@@ -93,10 +93,20 @@ class Anime
   field :title
   field :url
 end
+```
 
+```ruby
+# Read the field values
 anime = Anime.new({ title: 'The Vampire Dies in No Time', url: 'https://sugushinu-anime.jp/' })
 anime.title #=> 'The Vampire Dies in No Time'
 anime.url #=> 'https://sugushinu-anime.jp/'
+```
+
+```ruby
+# Write the field value
+anime = Anime.new({})
+anime.title = 'The Vampire Dies in No Time'
+anime.title #=> 'The Vampire Dies in No Time'
 ```
 
 If the data contains attributes not declared in the field, it raises no error and is simply ignored.

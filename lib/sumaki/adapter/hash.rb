@@ -7,6 +7,10 @@ module Sumaki
       def get(data, key)
         data[key]
       end
+
+      def set(data, key, value)
+        data[key] = value
+      end
     end
   end
 end
