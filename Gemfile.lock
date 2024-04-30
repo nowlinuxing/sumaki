@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sumaki (0.1.0)
+    sumaki (0.2.0)
       minenum
 
 GEM
