@@ -188,6 +188,25 @@ module Sumaki
       def get(name)
         self.class.adapter.get(object, name)
       end
+
+      def inspect
+        inspection = fields
+                     .map { |name, value| "#{name}: #{value.inspect}" }
+                     .join(', ')
+        "#<#{self.class.name} #{inspection}>"
+      end
+
+      def pretty_print(pp)
+        pp.object_address_group(self) do
+          pp.seplist(fields) do |field, value|
+            pp.breakable
+            pp.group(1) do
+              pp.text "#{field}: "
+              pp.pp value
+            end
+          end
+        end
+      end
     end
   end
 end
