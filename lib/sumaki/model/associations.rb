@@ -2,8 +2,8 @@
 
 module Sumaki
   module Model
-    # = Sumaki::Model::Association
-    module Association
+    # = Sumaki::Model::Associations
+    module Associations
       def self.included(base)
         base.extend ClassMethods
         base.include InstanceMethods

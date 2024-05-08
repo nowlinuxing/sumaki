@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Sumaki::Model::Association do
+RSpec.describe Sumaki::Model::Associations do
   describe '.singular' do
     subject(:wrapped) do
       SumakiSingularTest.new(

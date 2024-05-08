@@ -5,12 +5,12 @@ AllCops:
 
 Lint/ConstantDefinitionInBlock:
   Exclude:
-    - 'spec/sumaki/model/association_spec.rb'
+    - 'spec/sumaki/model/associations_spec.rb'
     - 'spec/sumaki/model/attribute_spec.rb'
     - 'spec/sumaki/model/enum_spec.rb'
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
-    - 'spec/sumaki/model/association_spec.rb'
+    - 'spec/sumaki/model/associations_spec.rb'
     - 'spec/sumaki/model/attribute_spec.rb'
     - 'spec/sumaki/model/enum_spec.rb'
