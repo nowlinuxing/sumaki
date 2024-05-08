@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'associations/reflection'
+
 module Sumaki
   module Model
     # = Sumaki::Model::Associations
@@ -7,8 +9,6 @@ module Sumaki
       def self.included(base)
         base.extend ClassMethods
         base.include InstanceMethods
-
-        base.instance_variable_set(:@classes, {})
       end
 
       module ClassMethods # :nodoc:
@@ -38,10 +38,10 @@ module Sumaki
         #   Specify the name of the class to wrap. Use this if the name of the class
         #   to wrap is not inferred from the nested field names.
         def singular(name, class_name: nil)
-          klass = class_for(name, class_name)
+          reflection = Reflection::Singular.new(self, name, class_name: class_name)
 
-          association_methods_module.define_method(name) do
-            klass.new(get(name), parent: self)
+          association_methods_module.define_method(reflection.name) do
+            reflection.model_class.new(get(reflection.name), parent: self)
           end
         end
 
@@ -73,10 +73,10 @@ module Sumaki
         #   Specify the name of the class to wrap. Use this if the name of the class
         #   to wrap is not inferred from the nested field names.
         def repeated(name, class_name: nil)
-          klass = class_for(name, class_name)
+          reflection = Reflection::Repeated.new(self, name, class_name: class_name)
 
-          association_methods_module.define_method(name) do
-            get(name).map { |object| klass.new(object, parent: self) }
+          association_methods_module.define_method(reflection.name) do
+            get(reflection.name).map { |object| reflection.model_class.new(object, parent: self) }
           end
         end
 
@@ -88,23 +88,6 @@ module Sumaki
             include mod
             mod
           end
-        end
-
-        def class_for(name, class_name = nil)
-          return @classes[name] if @classes.key?(name)
-
-          basename = class_name || classify(name.to_s)
-          klass = if const_defined?(basename)
-                    const_get(basename)
-                  else
-                    const_set(basename, Class.new { include Model })
-                  end
-          klass.parent ||= self
-          @classes[name] = klass
-        end
-
-        def classify(key)
-          key.gsub(/([a-z\d]+)_?/) { |_| Regexp.last_match(1).capitalize }
         end
       end
     end
