@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/associations/association'
 
 RSpec.describe Sumaki::Model::Associations::Association do
   let(:assoc_class) do

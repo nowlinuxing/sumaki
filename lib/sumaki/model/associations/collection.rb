@@ -11,7 +11,7 @@ module Sumaki
 
         singleton_class.attr_accessor :reflection
 
-        def_delegators :@models, :each
+        def_delegators :@models, :each, :[]
         def_delegators :@models, :inspect, :pretty_print
         def_delegators 'self.class', :reflection
 

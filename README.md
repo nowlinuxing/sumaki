@@ -124,23 +124,31 @@ class Book
   class Company
     include Sumaki::Model
     field :name
-    field :prefecture
   end
 end
+```
 
+```ruby
 data = {
   title: 'The Ronaldo Chronicles',
   company: {
     name: 'Autumn Books',
-    prefecture: 'Tokyo'
   }
 }
 
-comic = Book.new(data)
-comic.company.name #=> 'Autumn Books'
+# Read from the sub object
+book = Book.new(data)
+book.company.name #=> 'Autumn Books'
 ```
 
-sub object is wrapped with the class inferred from the field name under the original class.
+```ruby
+# Build a sub object
+book = Book.new({})
+book.build_company(name: 'Autumn Books')
+book.company #=> #<Book::Company:0x000073a618e31e80 name: "Autumn Books">
+```
+
+Sub object is wrapped with the class inferred from the field name under the original class.
 
 This can be changed by specifying the class to wrap.
 
@@ -182,7 +190,9 @@ class Company
     field :name
   end
 end
+```
 
+```ruby
 data = {
   name: 'The Ronaldo Vampire Hunter Agency',
   member: [
@@ -192,9 +202,17 @@ data = {
   ]
 }
 
+# Read from the sub object
 company = Company.new(data)
 company.member.size #=> 3
 company.member[2].name #=> 'John'
+```
+
+```ruby
+# Build a sub object
+company = Company.new({})
+company.member.build(name: 'John')
+company.member[0].name #=> 'John'
 ```
 
 The `class_name` option can also be used to specify the class to wrap.

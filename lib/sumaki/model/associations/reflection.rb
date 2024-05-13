@@ -28,6 +28,10 @@ module Sumaki
             end
           end
 
+          def association_for(model)
+            self.class.association_class.new(model, self)
+          end
+
           private
 
           def classify(str)
@@ -36,9 +40,12 @@ module Sumaki
         end
 
         class Singular < Base # :nodoc:
+          def self.association_class = Association::Singular
         end
 
         class Repeated < Base # :nodoc:
+          def self.association_class = Association::Repeated
+
           def collection_class
             @collection_class ||= begin
               class_name = "#{model_class.name[/(\w+)$/]}Collection"
