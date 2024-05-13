@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/associations/collection'
 
 RSpec.describe Sumaki::Model::Associations::Collection do
   describe '#build' do

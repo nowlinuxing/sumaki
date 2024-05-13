@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'collection'
+
 module Sumaki
   module Model
     module Associations
@@ -37,6 +39,17 @@ module Sumaki
         end
 
         class Repeated < Base # :nodoc:
+          def collection_class
+            @collection_class ||= begin
+              class_name = "#{model_class.name[/(\w+)$/]}Collection"
+
+              if @owner_class.const_defined?(class_name)
+                @owner_class.const_get(class_name)
+              else
+                @owner_class.const_set(class_name, Collection.build_subclass(self))
+              end
+            end
+          end
         end
       end
     end

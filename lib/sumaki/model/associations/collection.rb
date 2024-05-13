@@ -15,6 +15,12 @@ module Sumaki
         def_delegators :@models, :inspect, :pretty_print
         def_delegators 'self.class', :reflection
 
+        def self.build_subclass(reflection)
+          subclass = Class.new(self)
+          subclass.reflection = reflection
+          subclass
+        end
+
         def initialize(models = [], owner:)
           @models = models
           @owner = owner
