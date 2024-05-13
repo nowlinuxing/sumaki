@@ -191,6 +191,10 @@ module Sumaki
         @adapter.set(@object, name, value)
       end
 
+      def build_singular(name)
+        @adapter.build_singular(@object, name)
+      end
+
       def build_repeated_element(name)
         @adapter.build_repeated_element(@object, name)
       end

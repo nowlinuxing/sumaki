@@ -12,6 +12,10 @@ module Sumaki
         data[key] = value
       end
 
+      def build_singular(data, name)
+        data[name] = {}
+      end
+
       def build_repeated_element(_data, _name)
         {}
       end
