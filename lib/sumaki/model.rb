@@ -190,6 +190,14 @@ module Sumaki
       def set(name, value)
         @adapter.set(@object, name, value)
       end
+
+      def build_repeated_element(name)
+        @adapter.build_repeated_element(@object, name)
+      end
+
+      def apply_repeated(name, models)
+        @adapter.apply_repeated(@object, name, models.map(&:object))
+      end
     end
 
     module InstanceMethods # :nodoc:
@@ -210,6 +218,12 @@ module Sumaki
 
       def set(name, value)
         object_accessor.set(name, value)
+      end
+
+      def assign(attrs)
+        attrs.each do |attr, value|
+          public_send(:"#{attr}=", value)
+        end
       end
 
       def inspect
