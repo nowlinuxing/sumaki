@@ -255,14 +255,25 @@ class Character
   field :name
   enum :type, { vampire: 1, vampire_hunter: 2, familier: 3, editor: 4 }
 end
+```
 
+```ruby
 data = {
   name: 'John',
   type: 3
 }
 
+# Read the enum
 character = Character.new(data)
-character.type #=> :familier
+character.type.name #=> :familier
+character.type.familier? #=> true
+```
+
+```ruby
+# Write the enum value
+character = Character.new({})
+character.type = 1
+character.type.name #=> :vampire
 ```
 
 
