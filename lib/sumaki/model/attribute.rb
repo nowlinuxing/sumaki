@@ -8,6 +8,17 @@ module Sumaki
         base.extend ClassMethods
       end
 
+      module AccessorAdder # :nodoc:
+        def add(methods_module, field_name)
+          methods_module.module_eval <<~RUBY, __FILE__, __LINE__ + 1
+            def #{field_name}       # def title
+              get(:'#{field_name}') #   get(:'title')
+            end                     # end
+          RUBY
+        end
+        module_function :add
+      end
+
       module ClassMethods # :nodoc:
         # Access to the field.
         #
@@ -21,11 +32,7 @@ module Sumaki
         #   anime.title #=> 'The Vampire Dies in No Time'
         #   anime.url #=> 'https://sugushinu-anime.jp/'
         def field(name)
-          attribute_methods_module.module_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}       # def title
-              get(:'#{name}') #   get(:'title')
-            end               # end
-          RUBY
+          AccessorAdder.add(attribute_methods_module, name)
         end
 
         private
