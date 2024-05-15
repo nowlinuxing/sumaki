@@ -6,6 +6,7 @@ module Sumaki
     module Attribute
       def self.included(base)
         base.extend ClassMethods
+        base.include InstanceMethods
       end
 
       module AccessorAdder # :nodoc:
@@ -32,7 +33,12 @@ module Sumaki
         #   anime.title #=> 'The Vampire Dies in No Time'
         #   anime.url #=> 'https://sugushinu-anime.jp/'
         def field(name)
+          field_names << name.to_sym
           AccessorAdder.add(attribute_methods_module, name)
+        end
+
+        def field_names
+          @field_names ||= []
         end
 
         private
@@ -43,6 +49,12 @@ module Sumaki
             include mod
             mod
           end
+        end
+      end
+
+      module InstanceMethods # :nodoc:
+        def fields
+          self.class.field_names.map.with_object({}) { |e, r| r[e] = public_send(e) }
         end
       end
     end
