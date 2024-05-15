@@ -49,11 +49,6 @@ module Sumaki
             mod
           end
         end
-
-        # TODO: remove this
-        def classify(key)
-          key.gsub(/([a-z\d]+)_?/) { |_| Regexp.last_match(1).capitalize }
-        end
       end
     end
   end
