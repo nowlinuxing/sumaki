@@ -38,8 +38,9 @@ module Sumaki
         #   Specify the name of the class to wrap. Use this if the name of the class
         #   to wrap is not inferred from the nested field names.
         def singular(name, class_name: nil)
+          klass = class_for(name, class_name)
+
           association_methods_module.define_method(name) do
-            klass = self.class.class_for(name, class_name)
             klass.new(get(name), parent: self)
           end
         end
@@ -72,9 +73,20 @@ module Sumaki
         #   Specify the name of the class to wrap. Use this if the name of the class
         #   to wrap is not inferred from the nested field names.
         def repeated(name, class_name: nil)
+          klass = class_for(name, class_name)
+
           association_methods_module.define_method(name) do
-            klass = self.class.class_for(name, class_name)
             get(name).map { |object| klass.new(object, parent: self) }
+          end
+        end
+
+        private
+
+        def association_methods_module
+          @association_methods_module ||= begin
+            mod = Module.new
+            include mod
+            mod
           end
         end
 
@@ -89,16 +101,6 @@ module Sumaki
                   end
           klass.parent ||= self
           @classes[name] = klass
-        end
-
-        private
-
-        def association_methods_module
-          @association_methods_module ||= begin
-            mod = Module.new
-            include mod
-            mod
-          end
         end
 
         def classify(key)
