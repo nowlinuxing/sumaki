@@ -11,6 +11,33 @@ module Sumaki
         base.include InstanceMethods
       end
 
+      module AccessorAdder
+        module Singular # :nodoc:
+          def add(methods_module, reflection)
+            add_getter(methods_module, reflection)
+          end
+
+          private
+
+          def add_getter(methods_module, reflection)
+            methods_module.define_method(reflection.name) do
+              reflection.model_class.new(get(reflection.name), parent: self)
+            end
+          end
+
+          module_function :add, :add_getter
+        end
+
+        module Repeated # :nodoc:
+          def add(methods_module, reflection)
+            methods_module.define_method(reflection.name) do
+              get(reflection.name).map { |object| reflection.model_class.new(object, parent: self) }
+            end
+          end
+          module_function :add
+        end
+      end
+
       module ClassMethods # :nodoc:
         # Access to the sub object.
         #
@@ -39,10 +66,7 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def singular(name, class_name: nil)
           reflection = Reflection::Singular.new(self, name, class_name: class_name)
-
-          association_methods_module.define_method(reflection.name) do
-            reflection.model_class.new(get(reflection.name), parent: self)
-          end
+          AccessorAdder::Singular.add(association_methods_module, reflection)
         end
 
         # Access to the repeated sub objects
@@ -74,10 +98,7 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def repeated(name, class_name: nil)
           reflection = Reflection::Repeated.new(self, name, class_name: class_name)
-
-          association_methods_module.define_method(reflection.name) do
-            get(reflection.name).map { |object| reflection.model_class.new(object, parent: self) }
-          end
+          AccessorAdder::Repeated.add(association_methods_module, reflection)
         end
 
         private
