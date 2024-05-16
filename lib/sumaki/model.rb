@@ -177,6 +177,17 @@ module Sumaki
       end
     end
 
+    class ObjectAccessor # :nodoc:
+      def initialize(object, adapter)
+        @object = object
+        @adapter = adapter
+      end
+
+      def get(name)
+        @adapter.get(@object, name)
+      end
+    end
+
     module InstanceMethods # :nodoc:
       attr_reader :object, :parent
 
@@ -185,8 +196,12 @@ module Sumaki
         @parent = parent
       end
 
+      def object_accessor
+        @object_accessor ||= ObjectAccessor.new(object, self.class.adapter)
+      end
+
       def get(name)
-        self.class.adapter.get(object, name)
+        object_accessor.get(name)
       end
 
       def inspect
