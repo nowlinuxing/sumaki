@@ -122,4 +122,28 @@ RSpec.describe Sumaki::Model::Attribute do
       end
     end
   end
+
+  describe 'getter' do
+    subject { model.foo }
+
+    let(:klass) do
+      Class.new do
+        include Sumaki::Model
+
+        field :foo
+      end
+    end
+
+    context "when the value doesn't exist" do
+      let(:model) { klass.new({}) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'when the value exists' do
+      let(:model) { klass.new({ foo: 'value' }) }
+
+      it { is_expected.to eq('value') }
+    end
+  end
 end
