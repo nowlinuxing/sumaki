@@ -12,5 +12,16 @@ RSpec.describe Sumaki::Model::Enum do
 
       it { expect(wrapped.type.name).to eq(:b) }
     end
+
+    describe 'setter' do
+      subject(:type_name) do
+        wrapped.type = 2
+        wrapped.type.name
+      end
+
+      let(:wrapped) { SumakiEnumTest.new({}) }
+
+      it { expect(type_name).to eq(:b) }
+    end
   end
 end

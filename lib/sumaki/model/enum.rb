@@ -15,7 +15,11 @@ module Sumaki
         def get(model, name)
           model.get(name)
         end
-        module_function :get
+
+        def set(model, name, value)
+          model.set(name, value)
+        end
+        module_function :get, :set
       end
 
       module ClassMethods # :nodoc:
@@ -36,6 +40,12 @@ module Sumaki
         #   character.type.name #=> :familier
         #   character.type.familier? #=> true
         #   character.type.vampire? #=> false
+        #
+        # Enum can also be set.
+        #
+        #   character = Character.new({})
+        #   character.type = 1
+        #   character.type.name #=> :vampire
         def enum(name, values)
           super(name, values, adapter: EnumAttrAccessor)
         end

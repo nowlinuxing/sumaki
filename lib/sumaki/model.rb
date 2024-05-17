@@ -177,6 +177,33 @@ module Sumaki
       end
     end
 
+    class ObjectAccessor # :nodoc:
+      def initialize(object, adapter)
+        @object = object
+        @adapter = adapter
+      end
+
+      def get(name)
+        @adapter.get(@object, name)
+      end
+
+      def set(name, value)
+        @adapter.set(@object, name, value)
+      end
+
+      def build_singular(name)
+        @adapter.build_singular(@object, name)
+      end
+
+      def build_repeated_element(name)
+        @adapter.build_repeated_element(@object, name)
+      end
+
+      def apply_repeated(name, models)
+        @adapter.apply_repeated(@object, name, models.map(&:object))
+      end
+    end
+
     module InstanceMethods # :nodoc:
       attr_reader :object, :parent
 
@@ -185,8 +212,22 @@ module Sumaki
         @parent = parent
       end
 
+      def object_accessor
+        @object_accessor ||= ObjectAccessor.new(object, self.class.adapter)
+      end
+
       def get(name)
-        self.class.adapter.get(object, name)
+        object_accessor.get(name)
+      end
+
+      def set(name, value)
+        object_accessor.set(name, value)
+      end
+
+      def assign(attrs)
+        attrs.each do |attr, value|
+          public_send(:"#{attr}=", value)
+        end
       end
 
       def inspect

@@ -34,6 +34,19 @@ RSpec.describe Sumaki::Model::Associations do
       expect(wrapped.foo.parent).to be_a(SumakiSingularTest)
     end
 
+    describe '#build_association' do
+      subject(:build) { wrapped.build_foo }
+
+      let(:wrapped) { SumakiSingularTest.new({}) }
+
+      it { is_expected.to be_a(SumakiSingularTest::Foo) }
+
+      it do
+        build
+        expect(wrapped.foo).to be_a(SumakiSingularTest::Foo)
+      end
+    end
+
     context 'when nested' do
       it 'defines a method that returns an instance of the class' do
         expect(wrapped.foo.bar).to be_a(SumakiSingularTest::Foo::Bar)
@@ -138,6 +151,19 @@ RSpec.describe Sumaki::Model::Associations do
 
     it 'sets the parent to the instances returned by the method it defines' do
       expect(wrapped.foo[0].parent).to be_a(SumakiRepeatedTest)
+    end
+
+    describe 'association#build' do
+      subject(:build) { wrapped.foo.build }
+
+      let(:wrapped) { SumakiRepeatedTest.new({}) }
+
+      it { is_expected.to be_a(SumakiRepeatedTest::Foo) }
+
+      it do
+        build
+        expect(wrapped.foo).to match([be_an_instance_of(SumakiRepeatedTest::Foo)])
+      end
     end
 
     context 'when nested' do
