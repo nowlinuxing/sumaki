@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/fields/type/boolean'
 
 RSpec.describe Sumaki::Model::Fields::Type::Boolean do
   describe '.serialize' do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/fields/type/float'
 
 RSpec.describe Sumaki::Model::Fields::Type::Float do
   describe '.serialize' do

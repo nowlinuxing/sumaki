@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/fields/type/string'
 
 RSpec.describe Sumaki::Model::Fields::Type::String do
   describe '.serialize' do

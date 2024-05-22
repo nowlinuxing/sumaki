@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'sumaki/model/fields/type/integer'
 
 RSpec.describe Sumaki::Model::Fields::Type::Integer do
   describe '.serialize' do
