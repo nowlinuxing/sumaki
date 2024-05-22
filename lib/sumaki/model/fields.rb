@@ -2,8 +2,8 @@
 
 module Sumaki
   module Model
-    # = Sumaki::Model::Attribute
-    module Attribute
+    # = Sumaki::Model::Fields
+    module Fields
       def self.included(base)
         base.extend ClassMethods
         base.include InstanceMethods

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'model/attribute'
+require_relative 'model/fields'
 require_relative 'model/associations'
 require_relative 'model/enum'
 
@@ -163,7 +163,7 @@ module Sumaki
       base.extend ClassMethods
       base.include InstanceMethods
 
-      base.include Attribute
+      base.include Fields
       base.include Associations
       base.include Enum
     end

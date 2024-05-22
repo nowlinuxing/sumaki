@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Sumaki::Model::Attribute do
+RSpec.describe Sumaki::Model::Fields do
   describe '.field' do
     subject(:wrapped) { klass.new({ a: 2 }) }
 
