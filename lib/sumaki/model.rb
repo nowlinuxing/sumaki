@@ -237,12 +237,14 @@ module Sumaki
         "#<#{self.class.name} #{inspection}>"
       end
 
-      def pretty_print(pp)
+      def pretty_print(pp) # rubocop:disable Metrics/MethodLength
         pp.object_address_group(self) do
-          pp.seplist(fields) do |field, value|
+          pp.seplist(fields, -> { pp.text ',' }) do |field, value|
             pp.breakable
             pp.group(1) do
-              pp.text "#{field}: "
+              pp.text field.to_s
+              pp.text ':'
+              pp.breakable
               pp.pp value
             end
           end
