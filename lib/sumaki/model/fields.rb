@@ -17,11 +17,17 @@ module Sumaki
         end
 
         def get(field_name)
-          @model.get(field_name)
+          reflection = @model.class.field_reflections[field_name]
+
+          value = @model.get(reflection.name)
+          reflection.type_class.deserialize(value)
         end
 
         def set(field_name, value)
-          @model.set(field_name, value)
+          reflection = @model.class.field_reflections[field_name]
+
+          serialized = reflection.type_class.serialize(value)
+          @model.set(reflection.name, serialized)
         end
       end
 
@@ -69,8 +75,30 @@ module Sumaki
         #   anime = Anime.new({})
         #   anime.title = 'The Vampire Dies in No Time'
         #   anime.title #=> 'The Vampire Dies in No Time'
-        def field(name)
-          reflection = Reflection.new(name)
+        #
+        # == Type casting
+        #
+        # When a type is specified, it will be typecast.
+        #
+        #   class Character
+        #     include Sumaki::Model
+        #
+        #     field :age, :int
+        #   end
+        #
+        #   character = Character.new({ age: '208' })
+        #   character.age #=> 208
+        #
+        # Types are:
+        #
+        # * <tt>:int</tt>
+        # * <tt>:float</tt>
+        # * <tt>:string</tt>
+        # * <tt>:bool</tt>
+        # * <tt>:date</tt>
+        # * <tt>:datetime</tt>
+        def field(name, type = nil)
+          reflection = Reflection.new(name, type)
           AccessorAdder.add(self, attribute_methods_module, reflection)
         end
 
