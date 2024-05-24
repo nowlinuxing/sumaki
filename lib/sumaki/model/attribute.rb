@@ -9,6 +9,20 @@ module Sumaki
         base.include InstanceMethods
       end
 
+      class FieldAccessor # :nodoc:
+        def initialize(model)
+          @model = model
+        end
+
+        def get(field_name)
+          @model.get(field_name)
+        end
+
+        def set(field_name, value)
+          @model.set(field_name, value)
+        end
+      end
+
       module AccessorAdder # :nodoc:
         def add(methods_module, field_name)
           add_getter(methods_module, field_name)
@@ -17,17 +31,17 @@ module Sumaki
 
         def add_getter(methods_module, field_name)
           methods_module.module_eval <<~RUBY, __FILE__, __LINE__ + 1
-            def #{field_name}       # def title
-              get(:'#{field_name}') #   get(:'title')
-            end                     # end
+            def #{field_name}                      # def title
+              field_accessor.get(:'#{field_name}') #   field_accessor.get(:'title')
+            end                                    # end
           RUBY
         end
 
         def add_setter(methods_module, field_name)
           methods_module.module_eval <<~RUBY, __FILE__, __LINE__ + 1
-            def #{field_name}=(value)      # def title=(value)
-              set(:'#{field_name}', value) #   set(:'title', value)
-            end                            # end
+            def #{field_name}=(value)                     # def title=(value)
+              field_accessor.set(:'#{field_name}', value) #   field_accessor.set(:'title', value)
+            end                                           # end
           RUBY
         end
         module_function :add, :add_getter, :add_setter
@@ -74,6 +88,12 @@ module Sumaki
       module InstanceMethods # :nodoc:
         def fields
           self.class.field_names.map.with_object({}) { |e, r| r[e] = public_send(e) }
+        end
+
+        private
+
+        def field_accessor
+          @field_accessor ||= FieldAccessor.new(self)
         end
       end
     end
