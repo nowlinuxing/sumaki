@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'fields/reflection'
+
 module Sumaki
   module Model
     # = Sumaki::Model::Fields
@@ -24,9 +26,11 @@ module Sumaki
       end
 
       module AccessorAdder # :nodoc:
-        def add(methods_module, field_name)
-          add_getter(methods_module, field_name)
-          add_setter(methods_module, field_name)
+        def add(model_class, methods_module, reflection)
+          add_getter(methods_module, reflection.name)
+          add_setter(methods_module, reflection.name)
+
+          model_class.field_reflections[reflection.name] = reflection
         end
 
         def add_getter(methods_module, field_name)
@@ -66,12 +70,16 @@ module Sumaki
         #   anime.title = 'The Vampire Dies in No Time'
         #   anime.title #=> 'The Vampire Dies in No Time'
         def field(name)
-          field_names << name.to_sym
-          AccessorAdder.add(attribute_methods_module, name)
+          reflection = Reflection.new(name)
+          AccessorAdder.add(self, attribute_methods_module, reflection)
         end
 
         def field_names
-          @field_names ||= []
+          field_reflections.keys
+        end
+
+        def field_reflections
+          @field_reflections ||= {}
         end
 
         private
