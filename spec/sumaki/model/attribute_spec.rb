@@ -18,11 +18,13 @@ RSpec.describe Sumaki::Model::Attribute do
   end
 
   describe '.field' do
-    subject(:wrapped) { SumakiAttributeTest.new({ a: 2 }) }
+    subject(:wrapped) { klass.new({ a: 2 }) }
 
-    class SumakiAttributeTest
-      include Sumaki::Model
-      field :a
+    let(:klass) do
+      Class.new do
+        include Sumaki::Model
+        field :a
+      end
     end
 
     it 'defines a method that returns a value' do
@@ -30,15 +32,16 @@ RSpec.describe Sumaki::Model::Attribute do
     end
 
     context 'when the defined method is overrided' do
-      subject(:wrapped) { SumakiOverrideAttributeTest.new({ a: 2 }) }
+      subject(:wrapped) { klass.new({ a: 2 }) }
 
-      class SumakiOverrideAttributeTest
-        include Sumaki::Model
-        field :a
-
-        def a
-          super * 7
+      let(:klass) do
+        c = super()
+        c.class_eval do
+          def a
+            super * 7
+          end
         end
+        c
       end
 
       it 'overrides the defined method' do
