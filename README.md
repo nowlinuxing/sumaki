@@ -111,6 +111,30 @@ anime.title #=> 'The Vampire Dies in No Time'
 
 If the data contains attributes not declared in the field, it raises no error and is simply ignored.
 
+#### Type casting
+
+When a type is specified, it will be typecast.
+
+```ruby
+class Character
+  include Sumaki::Model
+
+  field :age, :int
+end
+
+character = Character.new({ age: '208' })
+character.age #=> 208
+```
+
+Types are:
+
+* `:int`
+* `:float`
+* `:string`
+* `:bool`
+* `:date`
+* `:datetime`
+
 ### Access to the sub object
 
 By declaring `singular`, you can access the sub object.

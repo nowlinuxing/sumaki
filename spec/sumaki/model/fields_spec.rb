@@ -35,59 +35,53 @@ RSpec.describe Sumaki::Model::Fields do
   end
 
   describe 'getter' do
-    subject { model.foo }
+    subject { klass.new({ foo: '123' }).foo }
 
     let(:klass) do
-      Class.new do
-        include Sumaki::Model
-
-        field :foo
-      end
+      c = Class.new { include Sumaki::Model }
+      c.field :foo, field_type
+      c
     end
 
-    context "when the value doesn't exist" do
-      let(:model) { klass.new({}) }
+    context 'when the field type is not specified' do
+      let(:field_type) { nil }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq('123') }
     end
 
-    context 'when the value exists' do
-      let(:model) { klass.new({ foo: 'value' }) }
+    context 'when the field type is specified' do
+      let(:field_type) { :int }
 
-      it { is_expected.to eq('value') }
+      it { is_expected.to eq(123) }
     end
   end
 
   describe 'setter' do
-    subject(:set) { model.foo = 'new value' }
+    subject(:set) { model.foo = '123' }
 
     let(:klass) do
-      Class.new do
-        include Sumaki::Model
-
-        field :foo
-      end
+      c = Class.new { include Sumaki::Model }
+      c.field :foo, field_type
+      c
     end
 
-    context "when the value doesn't exist" do
-      let(:model) { klass.new({}) }
+    let(:model) { klass.new({}) }
 
-      it { is_expected.to eq('new value') }
+    context 'when the field type is not specified' do
+      let(:field_type) { nil }
 
       it do
         set
-        expect(model.object).to eq({ foo: 'new value' })
+        expect(model.object).to eq({ foo: '123' })
       end
     end
 
-    context 'when the value exists' do
-      let(:model) { klass.new({ foo: 'old value' }) }
-
-      it { is_expected.to eq('new value') }
+    context 'when the field type is specified' do
+      let(:field_type) { :int }
 
       it do
         set
-        expect(model.object).to eq({ foo: 'new value' })
+        expect(model.object).to eq({ foo: 123 })
       end
     end
   end

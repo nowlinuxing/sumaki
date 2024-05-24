@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'fields/reflection'
+
 module Sumaki
   module Model
     # = Sumaki::Model::Fields
@@ -15,18 +17,26 @@ module Sumaki
         end
 
         def get(field_name)
-          @model.get(field_name)
+          reflection = @model.class.field_reflections[field_name]
+
+          value = @model.get(reflection.name)
+          reflection.type_class.deserialize(value)
         end
 
         def set(field_name, value)
-          @model.set(field_name, value)
+          reflection = @model.class.field_reflections[field_name]
+
+          serialized = reflection.type_class.serialize(value)
+          @model.set(reflection.name, serialized)
         end
       end
 
       module AccessorAdder # :nodoc:
-        def add(methods_module, field_name)
-          add_getter(methods_module, field_name)
-          add_setter(methods_module, field_name)
+        def add(model_class, methods_module, reflection)
+          add_getter(methods_module, reflection.name)
+          add_setter(methods_module, reflection.name)
+
+          model_class.field_reflections[reflection.name] = reflection
         end
 
         def add_getter(methods_module, field_name)
@@ -65,13 +75,39 @@ module Sumaki
         #   anime = Anime.new({})
         #   anime.title = 'The Vampire Dies in No Time'
         #   anime.title #=> 'The Vampire Dies in No Time'
-        def field(name)
-          field_names << name.to_sym
-          AccessorAdder.add(attribute_methods_module, name)
+        #
+        # == Type casting
+        #
+        # When a type is specified, it will be typecast.
+        #
+        #   class Character
+        #     include Sumaki::Model
+        #
+        #     field :age, :int
+        #   end
+        #
+        #   character = Character.new({ age: '208' })
+        #   character.age #=> 208
+        #
+        # Types are:
+        #
+        # * <tt>:int</tt>
+        # * <tt>:float</tt>
+        # * <tt>:string</tt>
+        # * <tt>:bool</tt>
+        # * <tt>:date</tt>
+        # * <tt>:datetime</tt>
+        def field(name, type = nil)
+          reflection = Reflection.new(name, type)
+          AccessorAdder.add(self, attribute_methods_module, reflection)
         end
 
         def field_names
-          @field_names ||= []
+          field_reflections.keys
+        end
+
+        def field_reflections
+          @field_reflections ||= {}
         end
 
         private
