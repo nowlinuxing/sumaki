@@ -1,22 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Sumaki::Model::Attribute do
-  describe '.field_names' do
-    subject { klass.field_names }
-
-    let(:klass) do
-      Class.new do
-        include Sumaki::Model
-
-        field :foo
-        field :bar
-        field :baz
-      end
-    end
-
-    it { is_expected.to eq(%i[foo bar baz]) }
-  end
-
   describe '.field' do
     subject(:wrapped) { klass.new({ a: 2 }) }
 
@@ -106,5 +90,21 @@ RSpec.describe Sumaki::Model::Attribute do
         expect(model.object).to eq({ foo: 'new value' })
       end
     end
+  end
+
+  describe '.field_names' do
+    subject { klass.field_names }
+
+    let(:klass) do
+      Class.new do
+        include Sumaki::Model
+
+        field :foo
+        field :bar
+        field :baz
+      end
+    end
+
+    it { is_expected.to eq(%i[foo bar baz]) }
   end
 end
