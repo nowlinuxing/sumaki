@@ -18,8 +18,8 @@ module Sumaki
           def model_class
             @model_class ||= begin
               basename = @class_name&.to_s || classify(@name.to_s)
-              klass = if @owner_class.const_defined?(basename)
-                        @owner_class.const_get(basename)
+              klass = if @owner_class.const_defined?(basename, false)
+                        @owner_class.const_get(basename, false)
                       else
                         @owner_class.const_set(basename, Class.new { include Model })
                       end
