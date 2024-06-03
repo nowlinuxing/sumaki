@@ -11,15 +11,14 @@ module Sumaki
         base.extend ClassMethods
       end
 
-      module EnumAttrAccessor # :nodoc:
-        def get(model, name)
-          model.get(name)
+      class EnumAttrAccessor < Minenum::Enum::Adapter::Base # :nodoc:
+        def get
+          @enum_object.get(@name)
         end
 
-        def set(model, name, value)
-          model.set(name, value)
+        def set(value)
+          @enum_object.set(@name, value)
         end
-        module_function :get, :set
       end
 
       module ClassMethods # :nodoc:
@@ -47,7 +46,7 @@ module Sumaki
         #   character.type = 1
         #   character.type.name #=> :vampire
         def enum(name, values)
-          super(name, values, adapter: EnumAttrAccessor)
+          super(name, values, adapter_builder: EnumAttrAccessor)
         end
 
         private

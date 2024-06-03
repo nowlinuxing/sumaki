@@ -298,6 +298,12 @@ character.type.familier? #=> true
 character = Character.new({})
 character.type = 1
 character.type.name #=> :vampire
+
+character.type = :vampire_hunter
+character.type.name #=> :vampire_hunter
+
+character.type.familier!
+character.type.name #=> :familier
 ```
 
 
