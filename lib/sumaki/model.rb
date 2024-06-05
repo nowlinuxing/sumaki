@@ -239,7 +239,7 @@ module Sumaki
       end
 
       def inspect
-        inspection = fields
+        inspection = attributes
                      .map { |name, value| "#{name}: #{value.inspect}" }
                      .join(', ')
         "#<#{self.class.name} #{inspection}>"
@@ -247,10 +247,10 @@ module Sumaki
 
       def pretty_print(pp) # rubocop:disable Metrics/MethodLength
         pp.object_address_group(self) do
-          pp.seplist(fields, -> { pp.text ',' }) do |field, value|
+          pp.seplist(attributes, -> { pp.text ',' }) do |attribute, value|
             pp.breakable
             pp.group(1) do
-              pp.text field.to_s
+              pp.text attribute.to_s
               pp.text ':'
               pp.breakable
               pp.pp value

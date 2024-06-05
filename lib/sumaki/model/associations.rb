@@ -90,7 +90,7 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def singular(name, class_name: nil)
           reflection = Reflection::Singular.new(self, name, class_name: class_name)
-          AccessorAdder::Singular.add(_sumaki_methods_module, reflections, reflection)
+          AccessorAdder::Singular.add(_sumaki_methods_module, _sumaki_association_reflections, reflection)
         end
 
         # Access to the repeated sub objects
@@ -128,11 +128,11 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def repeated(name, class_name: nil)
           reflection = Reflection::Repeated.new(self, name, class_name: class_name)
-          AccessorAdder::Repeated.add(_sumaki_methods_module, reflections, reflection)
+          AccessorAdder::Repeated.add(_sumaki_methods_module, _sumaki_association_reflections, reflection)
         end
 
-        def reflections
-          @reflections ||= {}
+        def _sumaki_association_reflections
+          @_sumaki_association_reflections ||= {}
         end
       end
 
@@ -141,7 +141,7 @@ module Sumaki
 
         def association(name)
           @associations ||= {}
-          @associations[name.to_sym] ||= self.class.reflections[name.to_sym].association_for(self)
+          @associations[name.to_sym] ||= self.class._sumaki_association_reflections[name.to_sym].association_for(self)
         end
       end
     end

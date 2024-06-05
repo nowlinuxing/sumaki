@@ -86,8 +86,8 @@ RSpec.describe Sumaki::Model::Fields do
     end
   end
 
-  describe '.field_names' do
-    subject { klass.field_names }
+  describe '.attribute_names' do
+    subject { klass.attribute_names }
 
     let(:klass) do
       Class.new do

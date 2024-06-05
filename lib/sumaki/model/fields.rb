@@ -100,27 +100,27 @@ module Sumaki
         # * <tt>:datetime</tt>
         def field(name, type = nil)
           reflection = Reflection.new(name, type)
-          AccessorAdder.add(_sumaki_methods_module, field_reflections, reflection)
+          AccessorAdder.add(_sumaki_methods_module, _sumaki_attribute_reflections, reflection)
         end
 
-        def field_names
-          field_reflections.keys
+        def attribute_names
+          _sumaki_attribute_reflections.keys
         end
 
-        def field_reflections
-          @field_reflections ||= {}
+        def _sumaki_attribute_reflections
+          @_sumaki_attribute_reflections ||= {}
         end
       end
 
       module InstanceMethods # :nodoc:
-        def fields
-          self.class.field_names.map.with_object({}) { |e, r| r[e] = public_send(e) }
+        def attributes
+          self.class.attribute_names.map.with_object({}) { |e, r| r[e] = public_send(e) }
         end
 
         private
 
         def field_accessor
-          @field_accessor ||= FieldAccessor.new(self, self.class.field_reflections)
+          @field_accessor ||= FieldAccessor.new(self, self.class._sumaki_attribute_reflections)
         end
       end
     end
