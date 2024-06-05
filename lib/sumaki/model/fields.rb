@@ -100,7 +100,7 @@ module Sumaki
         # * <tt>:datetime</tt>
         def field(name, type = nil)
           reflection = Reflection.new(name, type)
-          AccessorAdder.add(attribute_methods_module, field_reflections, reflection)
+          AccessorAdder.add(_sumaki_methods_module, field_reflections, reflection)
         end
 
         def field_names
@@ -109,16 +109,6 @@ module Sumaki
 
         def field_reflections
           @field_reflections ||= {}
-        end
-
-        private
-
-        def attribute_methods_module
-          @attribute_methods_module ||= begin
-            mod = Module.new
-            include mod
-            mod
-          end
         end
       end
 

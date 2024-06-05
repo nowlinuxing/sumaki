@@ -48,16 +48,6 @@ module Sumaki
         def enum(name, values)
           super(name, values, adapter_builder: EnumAttrAccessor)
         end
-
-        private
-
-        def enum_methods_module
-          @enum_methods_module ||= begin
-            mod = Module.new
-            include mod
-            mod
-          end
-        end
       end
     end
   end

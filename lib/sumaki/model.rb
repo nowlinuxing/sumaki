@@ -175,6 +175,14 @@ module Sumaki
       def adapter
         @adapter || parent&.adapter || Config.default_adapter
       end
+
+      def _sumaki_methods_module
+        @_sumaki_methods_module ||= begin
+          mod = Module.new
+          include mod
+          mod
+        end
+      end
     end
 
     class ObjectAccessor # :nodoc:
