@@ -14,11 +14,11 @@ module Sumaki
 
       module AccessorAdder
         module Singular # :nodoc:
-          def add(model_class, methods_module, reflection)
+          def add(methods_module, reflections, reflection)
             add_getter(methods_module, reflection.name)
             add_builder(methods_module, reflection.name)
 
-            model_class.reflections[reflection.name] = reflection
+            reflections[reflection.name] = reflection
           end
 
           private
@@ -43,14 +43,14 @@ module Sumaki
         end
 
         module Repeated # :nodoc:
-          def add(model_class, methods_module, reflection)
+          def add(methods_module, reflections, reflection)
             methods_module.module_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{reflection.name}                        # def book
                 association(:#{reflection.name}).collection #   association(:book).collection
               end                                           # end
             RUBY
 
-            model_class.reflections[reflection.name] = reflection
+            reflections[reflection.name] = reflection
           end
           module_function :add
         end
@@ -90,7 +90,7 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def singular(name, class_name: nil)
           reflection = Reflection::Singular.new(self, name, class_name: class_name)
-          AccessorAdder::Singular.add(self, association_methods_module, reflection)
+          AccessorAdder::Singular.add(association_methods_module, reflections, reflection)
         end
 
         # Access to the repeated sub objects
@@ -128,7 +128,7 @@ module Sumaki
         #   to wrap is not inferred from the nested field names.
         def repeated(name, class_name: nil)
           reflection = Reflection::Repeated.new(self, name, class_name: class_name)
-          AccessorAdder::Repeated.add(self, association_methods_module, reflection)
+          AccessorAdder::Repeated.add(association_methods_module, reflections, reflection)
         end
 
         def reflections

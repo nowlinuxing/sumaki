@@ -12,19 +12,20 @@ module Sumaki
       end
 
       class FieldAccessor # :nodoc:
-        def initialize(model)
+        def initialize(model, reflections)
           @model = model
+          @reflections = reflections
         end
 
         def get(field_name)
-          reflection = @model.class.field_reflections[field_name]
+          reflection = @reflections[field_name]
 
           value = @model.get(reflection.name)
           reflection.type_class.deserialize(value)
         end
 
         def set(field_name, value)
-          reflection = @model.class.field_reflections[field_name]
+          reflection = @reflections[field_name]
 
           serialized = reflection.type_class.serialize(value)
           @model.set(reflection.name, serialized)
@@ -32,11 +33,11 @@ module Sumaki
       end
 
       module AccessorAdder # :nodoc:
-        def add(model_class, methods_module, reflection)
+        def add(methods_module, reflections, reflection)
           add_getter(methods_module, reflection.name)
           add_setter(methods_module, reflection.name)
 
-          model_class.field_reflections[reflection.name] = reflection
+          reflections[reflection.name] = reflection
         end
 
         def add_getter(methods_module, field_name)
@@ -99,7 +100,7 @@ module Sumaki
         # * <tt>:datetime</tt>
         def field(name, type = nil)
           reflection = Reflection.new(name, type)
-          AccessorAdder.add(self, attribute_methods_module, reflection)
+          AccessorAdder.add(attribute_methods_module, field_reflections, reflection)
         end
 
         def field_names
@@ -129,7 +130,7 @@ module Sumaki
         private
 
         def field_accessor
-          @field_accessor ||= FieldAccessor.new(self)
+          @field_accessor ||= FieldAccessor.new(self, self.class.field_reflections)
         end
       end
     end
