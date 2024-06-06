@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     sumaki (0.5.0)
-      minenum (>= 0.2.0)
+      minenum (>= 0.2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -19,7 +19,7 @@ GEM
       reline (>= 0.4.2)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
-    minenum (0.2.0)
+    minenum (0.2.1)
     parallel (1.24.0)
     parser (3.3.1.0)
       ast (~> 2.4.1)

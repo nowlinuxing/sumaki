@@ -46,7 +46,8 @@ module Sumaki
         #   character.type = 1
         #   character.type.name #=> :vampire
         def enum(name, values)
-          super(name, values, adapter_builder: EnumAttrAccessor)
+          _minenum_enum(name, values, _sumaki_methods_module, _sumaki_attribute_reflections,
+                        adapter_builder: EnumAttrAccessor)
         end
       end
     end
